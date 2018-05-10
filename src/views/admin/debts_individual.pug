@@ -42,4 +42,35 @@ html
 						div(Class="field")
 							label Amount
 							input(type="text" name="amount")
+						div(Class="ui error message")
+
 						button(class="ui submit button" type="submit") Add
+
+	script.
+		$('.ui.form').form({
+			inline: true,
+			fields: {
+				name: {
+					identifier: 'name',
+					rules: [
+						{
+							type: 'empty',
+							prompt: 'Please enter a name'
+						}
+					]
+				},
+				amount: {
+					identifier: 'amount',
+					rules: [
+						{
+							type: 'empty',
+							prompt: 'Please enter an amount'
+						},
+						{
+							type: 'number',
+							prompt: 'Please enter an amount in pounds'
+						}
+					]
+				}
+			}
+		});

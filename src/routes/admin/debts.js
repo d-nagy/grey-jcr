@@ -92,15 +92,16 @@ router.post('/', upload.single('debts'), function(req, res, next){
 				data.map(function(row){
 					return User.findByUsername(row[0]).then(function(user){
 						if (row.length != 2) throw httpError(400, "CSV should have two columns");
-						if (!Number.isInteger(Number(row[1]))) throw httpError(400, "The second column should be the amount of debt in pence");
+						if (isNaN(row[1])) throw httpError(400, "Invalid amount found: {" + row[1] + "}. The second column should be the amount of debt in pounds.");
 						return;
 					});
 				})
 			).then(function(){
 				return Promise.all(
 					data.map(function(row){
+						var amount = Math.floor(row[1]*100);
 						return User.findByUsername(row[0]).then(function(user){
-							return user.addDebt(req.body.name, req.body.message, row[1]);
+							return user.addDebt(req.body.name, req.body.message, amount);
 						});
 					})
 				);

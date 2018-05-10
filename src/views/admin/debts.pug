@@ -45,7 +45,7 @@ html
 							input(type="text" name="username" class="prompt" placeholder="Find a user...")
 						div(class="results")
 					h3(class="ui dividing header") Add Batch of Debts
-					p The file you upload should be a csv file. It should have two columns, one with usernames and one with the amount of debt in pence (in that order).
+					p The file you upload should be a csv file. It should have two columns, one with usernames and one with the amount of debt in pounds (in that order).
 					form(class="ui form" method="POST" action="/admin/debts" enctype="multipart/form-data")
 						div(class="field")
 							label Name
@@ -56,22 +56,47 @@ html
 						div(class="field")
 							label CSV File
 							input(type="file" name="debts")
+						div(class="ui error mesage")
+
 						button(type="submit" class="ui submit button")
 							i(class="upload icon")
 							| Upload
 
-					script.
-						$('.ui.search').search({
-							apiSettings: {
-								url: '/api/users/?q={query}'
-							},
-							fields: {
-								results: 'users',
-								title: 'username',
-								description : 'name'
-							},
-							onSelect: function (result, response) {
-								window.location.href = "/admin/debts/"+result.username;
-								return false;
+		script.
+			$('.ui.search').search({
+				apiSettings: {
+					url: '/api/users/?q={query}'
+				},
+				fields: {
+					results: 'users',
+					title: 'username',
+					description : 'name'
+				},
+				onSelect: function (result, response) {
+					window.location.href = "/admin/debts/"+result.username;
+					return false;
+				}
+			});
+
+			$('.ui.form').form({
+				fields: {
+					name: {
+						identifier: 'name',
+						rules: [
+							{
+								type: 'empty',
+								prompt: 'Please enter a name'
 							}
-						});
+						]
+					},
+					debts: {
+						identifier: 'debts',
+						rules: [
+							{
+								type: 'empty',
+								prompt: 'You must select a file to upload'
+							}
+						]
+					}
+				}
+			});
